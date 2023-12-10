@@ -12,11 +12,25 @@ git clone https://github.com/RAPA-LAUNCHER/SSHASH.git
 ```
 cd SSHASH && chmod +x *
 ```
-then 
+Then 
 ```
 ./sshash
 ```
-or
+OR
 ```
 bash sshash
+```
+Usage: 
+
+./sshash.sh -i [ip address] -p [port] -l [passwordlist-path]
+
+
+Exemples: 
+
+```
+./sshash.sh -u https://exemple.com -p 80 -l passwords.txt
+```
+
+```
+./sshash.sh -i 103.224.182.219 -p 80 -l passwords.txt
 ```
