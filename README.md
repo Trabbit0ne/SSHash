@@ -1,6 +1,7 @@
 # SSHASH
 
-![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/f44a7274-a18b-47b6-9384-ad01ca659f1a)
+![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/d74e88c6-7a71-4765-9eaa-4696a29640ae)
+
 
 ```
 apt update && apt upgrade -y
