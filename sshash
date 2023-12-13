@@ -1,5 +1,15 @@
 #!/bin/bash
 
+alias_to_add='alias sshash="cd && chmod +x * && ./sshash"'
+
+if ! grep -qxF "$alias_to_add" ~/.bashrc; then
+    echo "$alias_to_add" >> ~/.bashrc
+    echo "Alias ajouté à ~/.bashrc"
+else
+    echo "L'alias est déjà présent dans ~/.bashrc"
+fi
+
+
 clear
 trap 'echo -e "\nOperation aborted by the user."; exit' INT
 
