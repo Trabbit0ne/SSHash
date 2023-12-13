@@ -7,7 +7,7 @@
 apt update && apt upgrade -y
 ```
 ```
-git clone https://github.com/RAPA-LAUNCHER/SSHASH.git
+cd && git clone https://github.com/RAPA-LAUNCHER/SSHASH.git
 ```
 
 ```
