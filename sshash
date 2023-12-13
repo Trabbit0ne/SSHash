@@ -65,7 +65,9 @@ echo "  / ___/ ___| |_| | / _ \ / ___| |_| |  "
 echo " | (__| (___|  _  |/ ___ | (___|  _  |  "
 echo "  \____\____|_| |_/_/   \_\____|_| |_|  "
 echo "                              TRABBIT   "
-echo "======================================="
+echo
+echo "    * SSH CONNECTION BRUTE FORCER *     "
+echo "{>====================================<}"
 
 # Display target, port, and passlist filenames
 for i in "--{[+]TARGET} => $host_ip" "--{[+]PORT} => ${ssh_port:-22}" "--{[+]USERLIST} => $(basename "$userlist_path")" "--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
@@ -73,12 +75,12 @@ for i in "--{[+]TARGET} => $host_ip" "--{[+]PORT} => ${ssh_port:-22}" "--{[+]USE
     echo "$i"
 done
 sleep 0.2
-echo "======================================="
-echo "//BRUTEFORCE ATTACK STARTED//          "
-echo "======================================="
+echo "{>====================================<}"
+echo "     //BRUTEFORCE ATTACK STARTED//     "
+echo "{>====================================<}"
 for i in {1..39}; do
     sleep 0.01
-    echo -n "•"
+    echo -n "*"
 done
 echo
 
@@ -87,3 +89,6 @@ for user in "${users[@]}"; do
         test_ssh_password "$user" "$password" "$ssh_port" "$host_ip"
     done
 done
+echo "{>====================================<}"
+echo "                  Done.                 "
+echo "{>====================================<}"
