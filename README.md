@@ -23,11 +23,11 @@ bash sshash
 ```
 Usage: 
 
-./sshash -u [usernameslist_path] -i [ip address] -p [port] -l [passwordlist-path]
+sshash -u [usernameslist_path] -i [ip address] -p [port] -l [passwordlist-path]
 
 
 Exemple: 
 
 ```
-./sshash -u usernames.txt -i 103.224.182.219 -p 80 -l passwords.txt
+sshash -u usernames.txt -i 103.224.182.219 -p 80 -l passwords.txt
 ```
