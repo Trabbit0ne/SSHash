@@ -1,12 +1,35 @@
 #!/bin/bash
 
-alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
-                                                                           if ! grep -qxF "$alias_to_add" ~/.bashrc; then
+
+# Configurations
+alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'    
+if ! grep -qxF "$alias_to_add" ~/.bashrc; then
     echo "$alias_to_add" >> ~/.bashrc
     echo "Alias ajouté à ~/.bashrc"
 else
     echo "L'alias est déjà présent dans ~/.bashrc"
 fi
+
+# Installations
+if ! command -v nslookup &>/dev/null; then
+    echo "[i] Installing nslookup..."
+                                                                               if [[ "$(uname -o 2>/dev/null)" == "Android" ]]; then                          pkg update
+        pkg install dnsutils
+    elif [ "$(uname)" == "Linux" ]; then
+        sudo apt-get update
+        sudo apt-get install -y dnsutils
+    elif [ "$(uname)" == "Darwin" ]; then
+        if ! command -v brew &>/dev/null; then
+            echo "Homebrew not found. Please install Homebrew first."
+            exit 1
+        fi
+        brew install bind
+    else
+        echo "System not supported!"
+        exit 1
+    fi
+fi
+
 
 clear
 trap 'echo -e "\nOperation aborted by the user."; exit' INT
