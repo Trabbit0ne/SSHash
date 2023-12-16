@@ -26,10 +26,13 @@ bash sshash
 sshash -u USERLIST -i IP_OR_URL [-p PORT] -l PASSWORDLIST
 
 Options:
-  -u USERLIST         Path to the user list file.
-  -i IP_OR_URL        IP address or URL of the target.
-  -p PORT             SSH port (default is 22 if not specified).
-  -l PASSWORDLIST     Path to the password list file.
+  -u USERLIST => Path to the user list file.
+  
+  -i IP_OR_URL => IP address or URL of the target.
+
+  -p PORT => SSH port (default is 22 if not specified).
+  
+  -l PASSWORDLIST => Path to the password list file.
 
 
 ## Exemple: 
