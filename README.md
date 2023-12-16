@@ -21,9 +21,9 @@ OR
 ```
 bash sshash
 ```
-Usage: 
+## Usage: 
 
-Usage: sshash -u USERLIST -i IP_OR_URL [-p PORT] -l PASSWORDLIST
+sshash -u USERLIST -i IP_OR_URL [-p PORT] -l PASSWORDLIST
 
 Options:
   -u USERLIST         Path to the user list file.
@@ -32,7 +32,7 @@ Options:
   -l PASSWORDLIST     Path to the password list file.
 
 
-Exemple: 
+## Exemple: 
 
 ```
 sshash -u users.txt -i https://example.com -p 2222 -l passwords.txt
