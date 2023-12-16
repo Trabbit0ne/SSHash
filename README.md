@@ -23,11 +23,17 @@ bash sshash
 ```
 Usage: 
 
-sshash -u [usernameslist_path] -i [ip address] -p [port] -l [passwordlist-path]
+Usage: sshash -u USERLIST -i IP_OR_URL [-p PORT] -l PASSWORDLIST
+
+Options:
+  -u USERLIST         Path to the user list file.
+  -i IP_OR_URL        IP address or URL of the target.
+  -p PORT             SSH port (default is 22 if not specified).
+  -l PASSWORDLIST     Path to the password list file.
 
 
 Exemple: 
 
 ```
-sshash -u usernames.txt -i 103.224.182.219 -p 80 -l passwords.txt
+sshash -u users.txt -i https://example.com -p 2222 -l passwords.txt
 ```
