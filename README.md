@@ -1,6 +1,6 @@
 # SSHASH
 
-![image](https://i.ibb.co/XFkBgJh/Video-Guru-20231213-174553412.gif)
+![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/a768f8c0-3251-4af9-b963-066e59b2ef3c)
 
 
 ```
@@ -21,22 +21,18 @@ OR
 ```
 bash sshash
 ```
-## Usage: 
+## usage
 
-sshash -u USERLIST -i IP_OR_URL [-p PORT] -l PASSWORDLIST
+Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file>
+
 
 Options:
-  -u USERLIST => Path to the user list file.
-  
-  -i IP_OR_URL => IP address or URL of the target.
+ -u users_file
+ -t target <ip or url>
+ -p port
+ -l password_list
 
-  -p PORT => SSH port (default is 22 if not specified).
-  
-  -l PASSWORDLIST => Path to the password list file.
-
-
-## Exemple: 
-
-```
-sshash -u users.txt -i https://example.com -p 2222 -l passwords.txt
-```
+Exemples:
+ sshash -u usernames.txt -t https://exemple.com -p 22 -l passwords.txt
+ sshash -u usernames.txt -t 192.168.123.32 -p 80 -l passwords.txt
+ sshash -u users.txt -t https://exemple.com -l passwords.txt
