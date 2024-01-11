@@ -23,7 +23,6 @@ OR
 bash sshash
 ```
 ## usage
-
 Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file>
 
 
