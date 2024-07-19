@@ -10,7 +10,7 @@ apt update && apt upgrade -y
 
 ### SINGLE LINE INSTALLATION
 ```
-cd $HOME; git clone https://github.com/TrabbitOne/SSHash.git; cd SSHASH && chmod +x *; ./sshash; 
+cd $HOME; git clone https://github.com/TrabbitOne/SSHash.git; (cd $HOME/SSHash || cd SSHash) && chmod +x *; (./sshash.py || python3 sshash.py); 
 ```
 
 
