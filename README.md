@@ -1,4 +1,4 @@
-# SSHASH
+# SSHash
 
 ![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/d6739c8d-0719-41dc-8143-56ce4a620bcc)
 
