@@ -5,12 +5,12 @@
 
 ### UPDATE
 ```
-apt update && apt upgrade -y
+(apt update && apt upgrade -y || pkg update && pkg upgrade -y)
 ```
 
 ### SINGLE LINE INSTALLATION
 ```
-cd $HOME; git clone https://github.com/TrabbitOne/SSHash.git; (cd $HOME/SSHash || cd SSHash) && chmod +x *; (./sshash.py || python3 sshash.py); 
+cd $HOME && git clone https://github.com/TrabbitOne/SSHash.git && cd SSHash && chmod +x sshash.py && (python sshash.py || python3 sshash.py)
 ```
 
 
