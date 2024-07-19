@@ -3,25 +3,17 @@
 ![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/d6739c8d-0719-41dc-8143-56ce4a620bcc)
 
 
-
+### UPDATE
 ```
 apt update && apt upgrade -y
 ```
+
+### SINGLE LINE INSTALLATION
 ```
-cd && git clone https://github.com/RAPS-LAUNCHER/SSHASH.git
+cd $HOME; git clone https://github.com/TrabbitOne/SSHash.git; cd SSHASH && chmod +x *; ./sshash; 
 ```
 
-```
-cd SSHASH && chmod +x *
-```
-Then 
-```
-./sshash
-```
-OR
-```
-bash sshash
-```
+
 ## usage
 Usage: sshash -u <user_file> -t <target> -p <port> -l <password_file>
 
