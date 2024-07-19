@@ -29,7 +29,10 @@ from argparse import ArgumentParser
 # Clear function
 def clear_screen():
     os.system("clear")
- 
+
+# Unalias
+os.system("unalias sshash")
+
 def install_package(package_name):
     if package_name == "dnsutils":
         if sys.platform == "darwin":
