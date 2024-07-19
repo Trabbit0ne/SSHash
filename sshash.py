@@ -119,7 +119,7 @@ def display_banner():
                          (__ (__ |__|[__](__ |__|  
                          .__).__)|  ||  |.__)|  |  
 
-                    * SSHASH CONNECTION BRUTE FORCER *   
+                    * SSHASH CONNEXION BRUTE FORCER *   
            {>===============================================<}
     """)
 
