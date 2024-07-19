@@ -5,7 +5,7 @@
 
 ### UPDATE
 ```
-(apt update && apt upgrade -y || pkg update && pkg upgrade -y)
+(apt update -y || pkg update -y) && ( apt upgrade -y|| pkg upgrade -y)
 ```
 
 ### SINGLE LINE INSTALLATION
