@@ -29,21 +29,7 @@ from argparse import ArgumentParser
 # Clear function
 def clear_screen():
     os.system("clear")
-
-# Configurations
-alias_to_add = 'alias sshash="cd && cd SSHASH && chmod +x * && ./sshash"'
-bashrc_path = os.path.expanduser("~/.bashrc")
-
-def add_alias_to_bashrc():
-    with open(bashrc_path, 'r') as file:
-        if alias_to_add not in file.read():
-            with open(bashrc_path, 'a') as bashrc_file:
-                bashrc_file.write(f"\n{alias_to_add}\n")
-            subprocess.run(["source", bashrc_path], shell=True)
-            print("Alias added to ~/.bashrc")
-            time.sleep(0.5)
-            os.system('clear')
-
+ 
 def install_package(package_name):
     if package_name == "dnsutils":
         if sys.platform == "darwin":
