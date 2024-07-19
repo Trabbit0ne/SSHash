@@ -129,7 +129,7 @@ def display_usage():
   (__ (__ |__|[__](__ |__|  
   .__).__)|  ||  |.__)|  |  
   ------------------------  
-  \033[41mSSH CONNECTION BRUTEFORCER \033[0m
+  \033[41mSSH CONNEXION BRUTEFORCER \033[0m
 
  |R.C.S.A.| RAPS CYBER SECURITY AGENCY.
   WARNING: DO NOT USE FOR ILLEGAL/UNETHICAL PURPOSES.
