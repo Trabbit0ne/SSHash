@@ -1,7 +1,10 @@
-# SSHash
-
-![image](https://github.com/RAPS-LAUNCHER/SSHASH/assets/143559207/d6739c8d-0719-41dc-8143-56ce4a620bcc)
-
+<h1 align="center">
+  <br>
+  <a href="https://github.com/TrabbitOne/SSHash"><img src="https://i.ibb.co/TTHC65b/296031085-d6739c8d-0719-41dc-8143-56ce4a620bcc.png" alt="SSHash"></a>
+  <br>
+  SSHash
+  <br>
+</h1>
 
 ### UPDATE
 ```
