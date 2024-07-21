@@ -1,4 +1,4 @@
-<img src="https://i.ibb.co/TTHC65b/296031085-d6739c8d-0719-41dc-8143-56ce4a620bcc.png" alt="SSHash"></a>
+<img src="https://i.ibb.co/TTHC65b/296031085-d6739c8d-0719-41dc-8143-56ce4a620bcc.png" alt="SSHash">
 <h1 align="center">
   SSHash
 </h1>
