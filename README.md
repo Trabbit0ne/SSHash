@@ -10,5 +10,5 @@
 
 ### SINGLE LINE INSTALLATION
 ```
-cd $HOME && git clone https://github.com/TrabbitOne/SSHash.git && cd SSHash && chmod +x sshash.py && (python sshash.py || python3 sshash.py)
+git clone https://github.com/TrabbitOne/SSHash.git && cd SSHash && chmod +x sshash.py && (python sshash.py || python3 sshash.py)
 ```
