@@ -1,4 +1,4 @@
-<img src="https://i.ibb.co/gt0bJyL/Untitled35-20240813110443.png" alt="SSHash">
+<img src="https://github.com/Trabbit0ne/SSHash/blob/main/Images/Img1-SSHash-MockUp.png?raw=true" alt="MockUp">
 <h1 align="center">
   SSHash
 </h1>
